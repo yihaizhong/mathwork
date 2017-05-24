@@ -133,9 +133,9 @@ net.b{2}=B2;
 %网络进化参数
 % net.trainParam.epochs=100;
 % net.trainParam.lr=0.1;
-      net.divideParam.trainRatio = 100/100;
-     net.divideParam.valRatio = 0/100;
-     net.divideParam.testRatio = 0/100;
+%       net.divideParam.trainRatio = 70/100;
+%      net.divideParam.valRatio = 15/100;
+%      net.divideParam.testRatio = 15/100;
     net.trainParam.show = 50;  
        net.trainParam.lr = 0.05;  
        net.trainParam.mc = 0.9;  
@@ -151,11 +151,14 @@ net.b{2}=B2;
 % inputn_test=mapminmax('apply',input_test,inputps);
 
 inputn_test = input_test';
-an=sim(net,inputn_test);
+an=sim(net,[inputn inputn_test]);
 test_simu=mapminmax('reverse',an,xnopt);
-error=test_simu-output_test;
-rate = error/output_test*100;
-predict = test_simu;
+tg = trainSet(lag+1:end-1)';
+error=test_simu-[tg output_test];
+rate = error./output_test*100;
+rate = rate(end);
+predict = test_simu(end);
+error = error(end);
 % setdemorandstream(12);
 %     %创建网络
 %     hiddenLayerSize = 10; 
